@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowCam : MonoBehaviour
@@ -32,7 +30,7 @@ public class FollowCam : MonoBehaviour
             destination = POI.transform.position;
 
             // Once the projectile stops moving, stop following it
-            if (POI.TryGetComponent(out Rigidbody rb) && rb.IsSleeping())
+            if (POI.TryGetComponent(out Projectile proj) && !proj.awake)
             {
                 POI = null;
                 return;
