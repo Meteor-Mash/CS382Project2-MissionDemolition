@@ -1,52 +1,75 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowCam : MonoBehaviour
 {
-    static public GameObject POI;   // Point Of Interest: what the camera follows
+    static private FollowCam S; 
+    static public GameObject POI; 
+
+    public enum eView {none, slingshot, castle, both};
 
     [Header("Inscribed")]
-    public float easing = 0.05f;          // How smoothly the camera catches up
-    public Vector2 minXY = Vector2.zero;  // Don't let the camera go below/left of this
+    public float easing = 0.05f;
+    public Vector2 minXY = Vector2.zero; 
+    public GameObject viewBothGO;
 
     [Header("Dynamic")]
-    public float camZ;                    // The camera's starting Z position
+    public float camZ; 
+    public eView nextView = eView.slingshot;
 
-    void Awake()
-    {
-        camZ = transform.position.z;
+    void Awake() {
+        S = this;
+        camZ = this.transform.position.z;
     }
 
-    void FixedUpdate()
-    {
-        Vector3 destination;
+    void FixedUpdate() {
+        Vector3 destination = Vector3.zero;
 
-        if (POI == null)
-        {
-            // Nothing to follow: head back toward the slingshot area
-            destination = Vector3.zero;
-        }
-        else
-        {
-            destination = POI.transform.position;
-
-            // Once the projectile stops moving, stop following it
-            if (POI.TryGetComponent(out Projectile proj) && !proj.awake)
-            {
+        if(POI != null) {
+            Rigidbody poiRigid = POI.GetComponent<Rigidbody>();
+            if((poiRigid != null) && poiRigid.IsSleeping()) {
                 POI = null;
-                return;
             }
         }
 
-        // Keep the camera from dipping below the ground or behind the slingshot
+        if(POI != null) {
+            destination = POI.transform.position;
+        }
+
         destination.x = Mathf.Max(minXY.x, destination.x);
         destination.y = Mathf.Max(minXY.y, destination.y);
-
-        // Ease from the current position toward the destination
         destination = Vector3.Lerp(transform.position, destination, easing);
         destination.z = camZ;
         transform.position = destination;
-
-        // Zoom out as the projectile goes higher, so the ground stays in view
         Camera.main.orthographicSize = destination.y + 10;
+    }
+
+    public void SwitchView(eView newView) {
+        if(newView == eView.none) {
+            newView = nextView;
+        }
+        switch(newView) {
+            case eView.slingshot:
+                POI = null;
+                nextView = eView.castle;
+                break;
+            case eView.castle:
+                POI = MissionDemolition.GET_CASTLE();
+                nextView = eView.both;
+                break;
+            case eView.both:
+                POI = viewBothGO;
+                nextView = eView.slingshot;
+                break;
+        }
+    }
+    
+    public void SwitchView() {
+        SwitchView(eView.none);
+    }
+
+    static public void SWITCH_VIEW(eView newView) {
+        S.SwitchView(newView);
     }
 }
