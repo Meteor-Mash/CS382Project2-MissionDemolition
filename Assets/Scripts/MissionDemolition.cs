@@ -18,7 +18,9 @@ public class MissionDemolition : MonoBehaviour
     public Text uitLevel; 
     public Text uitShots; 
     public Vector3 castlePos; 
-    public GameObject[] castles; 
+    public GameObject[] castles;
+    public GameObject restartButtonPrefab;
+    public Transform canvasTransform;
 
     [Header("Dynamic")]
     public int level; 
@@ -26,7 +28,8 @@ public class MissionDemolition : MonoBehaviour
     public int shotsTaken;
     public GameObject castle; 
     public GameMode mode = GameMode.idle;
-    public string showing = "Show Slingshot"; 
+    public string showing = "Show Slingshot";
+    private Slingshot slingshot;
 
     
     void Start()
@@ -78,10 +81,27 @@ public class MissionDemolition : MonoBehaviour
     void NextLevel() {
         level++;
         if(level == levelMax) {
-            level = 0;
-            shotsTaken = 0;
+            GameOver();
+            return;
         }
         StartLevel();
+    }
+
+    void GameOver()
+    {
+        if (castle != null)
+        {
+            Destroy(castle);
+        }
+        GameObject slingshotGO = GameObject.Find("Slingshot");
+        slingshot = slingshotGO.GetComponent<Slingshot>();
+        slingshot.gameOver = true;
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach (GameObject tempGO in projectiles)
+        {
+            Destroy(tempGO);
+        }
+        GameObject restartButtonGO = Instantiate(restartButtonPrefab, canvasTransform);
     }
 
     static public void SHOT_FIRED() {

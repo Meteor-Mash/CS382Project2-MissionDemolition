@@ -14,6 +14,7 @@ public class Slingshot : MonoBehaviour
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
+    public bool gameOver = false;
 
     void Awake() {
         Transform launchPointTrans = transform.Find("LaunchPoint");
@@ -23,7 +24,10 @@ public class Slingshot : MonoBehaviour
     }
 
     void OnMouseEnter() {
-        launchPoint.SetActive(true);
+        if (!gameOver)
+        {
+            launchPoint.SetActive(true);
+        }
     }
 
     void OnMouseExit() {
@@ -31,10 +35,13 @@ public class Slingshot : MonoBehaviour
     }
 
     void OnMouseDown() {
-        aimingMode = true;
-        projectile = Instantiate(projectilePrefab) as GameObject;
-        projectile.transform.position = launchPos;
-        projectile.GetComponent<Rigidbody>().isKinematic = true;
+        if (!gameOver)
+        {
+            aimingMode = true;
+            projectile = Instantiate(projectilePrefab) as GameObject;
+            projectile.transform.position = launchPos;
+            projectile.GetComponent<Rigidbody>().isKinematic = true;
+        }
     }
 
     void Update() {
