@@ -1075,6 +1075,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8588524304518070438, guid: 2ee43e86f6c602b4493f941b6dd5fcfd, type: 3}
   velocityMult: 10
   projLinePrefab: {fileID: 6425265045057615814, guid: d51e61936d5dafe40ab03a38a90ed9c3, type: 3}
+  bandWidth: 0.15
+  bandMat: {fileID: 2100000, guid: 381c65add98ce5842bfbbf001fed461f, type: 2}
   launchPoint: {fileID: 0}
   launchPos: {x: 0, y: 0, z: 0}
   projectile: {fileID: 0}
