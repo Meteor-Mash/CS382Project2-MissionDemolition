@@ -10,6 +10,8 @@ public class Slingshot : MonoBehaviour
     public GameObject projLinePrefab;
     public float bandWidth = 0.15f;
     public Material bandMat;
+    public AudioClip pullBackClip;
+    public AudioClip shootClip;
 
     [Header("Dynamic")]
     public GameObject launchPoint;
@@ -21,12 +23,15 @@ public class Slingshot : MonoBehaviour
     private Transform rightArm;
     private LineRenderer leftBand;
     private LineRenderer rightBand;
+    private AudioSource audioSource;
 
     void Awake() {
         Transform launchPointTrans = transform.Find("LaunchPoint");
         launchPoint = launchPointTrans.gameObject;
         launchPoint.SetActive(false);
         launchPos = launchPointTrans.position;
+
+        audioSource = GetComponent<AudioSource>();
 
         leftArm = transform.Find("LeftArm");
         rightArm = transform.Find("RightArm");
@@ -74,6 +79,8 @@ public class Slingshot : MonoBehaviour
     void OnMouseDown() {
         if (!gameOver)
         {
+            audioSource.clip = pullBackClip;
+            audioSource.Play();
             aimingMode = true;
             projectile = Instantiate(projectilePrefab) as GameObject;
             projectile.transform.position = launchPos;
@@ -112,6 +119,8 @@ public class Slingshot : MonoBehaviour
             projectile = null;
             MissionDemolition.SHOT_FIRED();
             UpdateBand(launchPos);
+            audioSource.clip = shootClip;
+            audioSource.Play();
         }
     }
 }
