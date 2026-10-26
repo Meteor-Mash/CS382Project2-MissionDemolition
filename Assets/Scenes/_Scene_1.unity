@@ -846,7 +846,11 @@ MonoBehaviour:
   uitLevel: {fileID: 235754412}
   uitShots: {fileID: 246092790}
   castlePos: {x: 10, y: -9.5, z: 0}
-  castles: []
+  castles:
+  - {fileID: 5886188117850548659, guid: 2a3bdfd7991d2ce6c16b11b22713bdb3, type: 3}
+  - {fileID: 5886188117850548659, guid: fcd06236d7d8188ed77c48f7d7432444, type: 3}
+  - {fileID: 5886188117850548659, guid: a966ec8c2e3f215991b35731d9e2f7e1, type: 3}
+  - {fileID: 5886188117850548659, guid: 29246ae04394d61a97ff4ef9e178fb2b, type: 3}
   restartButtonPrefab: {fileID: 4624453180836658640, guid: 570e7773e740f5b4f8d260a432608850, type: 3}
   canvasTransform: {fileID: 81549771}
   level: 0
